@@ -1,0 +1,61 @@
+﻿using System.Collections;
+using System.Collections.Generic;
+using UnityEngine;
+
+public class Player : MonoBehaviour
+{
+    public float screenEdge = 9f,speedDecay = 10f;
+    private AudioSource sound;
+    private Game gameScript;
+    // Start is called before the first frame update
+    void Start()
+    {
+        sound = this.GetComponent<AudioSource>();
+        gameScript = this.GetComponent<Game>();
+    }
+
+    // Update is called once per frame
+    void Update()
+    {
+        if (Input.GetKeyDown("left") || Input.GetKeyDown("a"))
+        {
+            Debug.Log("left");
+            this.GetComponent<SpriteRenderer>().flipX = true;
+        }
+        if (Input.GetKeyDown("right") || Input.GetKeyDown("d"))
+        {
+            Debug.Log("right");
+            this.GetComponent<SpriteRenderer>().flipX = false;
+        }
+
+        float value = Input.GetAxis("Horizontal");
+        float faster = Input.GetAxis("Fire3");
+        if (faster != 0) value = value * 1.5f;
+        if (value != 0)
+        {
+            
+            Vector3 position = this.transform.position;
+            value = value / speedDecay;
+            position.x += value ;
+            this.transform.position = position;
+        }
+    
+        if (transform.position.x > screenEdge)
+        {
+            transform.position = new Vector3(screenEdge, transform.position.y, transform.position.z);
+        }
+        if (transform.position.x < -screenEdge) {
+            transform.position = new Vector3(-screenEdge, transform.position.y, transform.position.z);
+        }
+
+    }
+    void OnTriggerEnter2D(Collider2D coll)
+    {
+        Debug.Log("Player touched");
+        if (coll.gameObject.tag == "Fruit")
+        {
+            gameScript.ScoreUpdate(100);
+            sound.PlayOneShot(sound.clip);
+        }
+    }
+}
