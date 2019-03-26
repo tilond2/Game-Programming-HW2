@@ -71,8 +71,8 @@ public class FruitDrop : MonoBehaviour
         //changing direction randomly is now time-based because of FixedUpdate()
         if (gameStarted)
         {
-            if (speed > 0) speed += 0.001f;
-            else speed -= 0.001f;
+            if (speed > 0) speed += 0.0015f;
+            else speed -= 0.0015f;
         }
             
         if (Random.value < chanceToChangeDirections)
