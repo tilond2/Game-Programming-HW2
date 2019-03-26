@@ -5,12 +5,16 @@ using UnityEngine;
 public class Player : MonoBehaviour
 {
     public float screenEdge = 9f,speedDecay = 10f;
-    private AudioSource sound;
+    private AudioSource sound, sound2;
+    GameObject music;
     private Game gameScript;
+    public bool mute = false;
     // Start is called before the first frame update
     void Start()
     {
         sound = this.GetComponent<AudioSource>();
+        music = GameObject.Find("BGAudio");
+        sound2 = music.GetComponent<AudioSource>();
         gameScript = this.GetComponent<Game>();
     }
 
@@ -55,7 +59,23 @@ public class Player : MonoBehaviour
         if (coll.gameObject.tag == "Fruit")
         {
             gameScript.ScoreUpdate(100);
-            sound.PlayOneShot(sound.clip);
+            if (!mute)
+            {
+                sound.PlayOneShot(sound.clip);
+            }
+            
         }
+    }
+    public void muteSound()
+    {
+        if (!mute) {
+            mute = true;
+            sound2.mute = true;
+        }
+        else {
+            mute = false;
+            sound2.mute = false;
+
+        };
     }
 }

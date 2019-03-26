@@ -6,6 +6,7 @@ public class FruitDrop : MonoBehaviour
 {
     // Start is called before the first frame update
     public GameObject FruitPrefab;
+    GameObject GameAudio;
     public float BPM, delay = 0;
     private float seconds;
     // AppleTree Speed
@@ -20,7 +21,7 @@ public class FruitDrop : MonoBehaviour
     {
         seconds = (60 / BPM);
         Debug.Log("Seconds =: " + seconds);
-        
+        GameAudio = GameObject.Find("BGAudio");
 
     }
     void DropFruit()
@@ -39,14 +40,13 @@ public class FruitDrop : MonoBehaviour
             {
                 gameStarted = true;
                 Invoke("DropFruit", delay);
-                
-                GameObject audio = GameObject.Find("BGAudio");
-                AudioSource song = audio.GetComponent<AudioSource>();
-                song.Play();
+
+
+                GameAudio.GetComponent<AudioSource>().Play();
                 Debug.Log("Game started");
             }
         }
-        
+
         
         if (gameStarted)
         {
@@ -69,6 +69,12 @@ public class FruitDrop : MonoBehaviour
     void FixedUpdate()
     {
         //changing direction randomly is now time-based because of FixedUpdate()
+        if (gameStarted)
+        {
+            if (speed > 0) speed += 0.001f;
+            else speed -= 0.001f;
+        }
+            
         if (Random.value < chanceToChangeDirections)
         {
             speed *= -1;    // change direction randomly
